@@ -23,7 +23,11 @@ class AddMissingImportsQuickFix: QuickFix {
             val endCursor = offset(file.content, diagnosticRange.end)
             val symbolName = file.content.substring(startCursor, endCursor)
 
-            getImportAlternatives(symbolName, file.parse, index).map { (importStr, edit) ->
+            val uniqueAlternatives = getImportAlternatives(symbolName, file.parse, index)
+                                       .groupBy { (importStr, _) -> importStr }
+                                       .map { it.value.first() }
+
+            uniqueAlternatives.map { (importStr, edit) ->
                 val codeAction = CodeAction()
                 codeAction.title = "Import ${importStr}"
                 codeAction.kind = CodeActionKind.QuickFix
