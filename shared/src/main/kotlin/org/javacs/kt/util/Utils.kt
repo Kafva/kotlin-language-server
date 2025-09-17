@@ -13,7 +13,10 @@ fun execAndReadStdout(shellCommand: List<String>, directory: Path): String {
 }
 
 fun execAndReadStdoutAndStderr(shellCommand: List<String>, directory: Path): Pair<String, String> {
-    val process = ProcessBuilder(shellCommand).directory(directory.toFile()).start()
+    val builder = ProcessBuilder(shellCommand)
+    builder.environment()["JAVA_OPTS"] = System.getenv("JAVA_OPTS")
+    LOG.info("Passing JAVA_OPTS=${System.getenv("JAVA_OPTS")} for '${shellCommand[0]}'")
+    val process = builder.directory(directory.toFile()).start()
     val stdout = process.inputStream
     val stderr = process.errorStream
     var output = ""
