@@ -86,6 +86,12 @@ class KotlinLanguageServer(
         textDocuments.connect(client)
 
         LOG.info("Connected to client")
+
+        val javaVersion = System.getProperty("java.version")
+        LOG.info("java.version=${javaVersion}")
+        LOG.info("java.version=${javaVersion}")
+        LOG.info("JAVA_HOME=${System.getenv("JAVA_HOME")}")
+        LOG.info("JAVA_OPTS=${System.getenv("JAVA_OPTS")}")
     }
 
     override fun getTextDocumentService(): KotlinTextDocumentService = textDocuments
