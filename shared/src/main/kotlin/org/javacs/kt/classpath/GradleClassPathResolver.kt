@@ -104,6 +104,11 @@ private fun readDependenciesViaGradleCLI(
         } // Some Gradle plugins seem to cause this to output POMs, therefore filter JARs
         .toSet()
 
+    LOG.info("Resolved ${dependencies.count()} Gradle jars")
+    for (dep in dependencies) {
+        LOG.debug("  ${dep}")
+    }
+
     tmpScripts.forEach(Files::delete)
     return dependencies
 }
