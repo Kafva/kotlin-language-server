@@ -311,6 +311,8 @@ class KotlinTextDocumentService(
 
     private fun reportDiagnostics(compiled: Collection<URI>, kotlinDiagnostics: Diagnostics) {
         val langServerDiagnostics = kotlinDiagnostics
+            // Skip 'Unresolved reference: R' for Android projects
+            .filter { !(it.factoryName == "UNRESOLVED_REFERENCE" && it.psiElement.text == "R") }
             .flatMap(::convertDiagnostic)
             .filter { config.diagnostics.enabled && it.second.severity <= config.diagnostics.level }
         val byFile = langServerDiagnostics.groupBy({ it.first }, { it.second })
